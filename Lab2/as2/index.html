@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<script type = "text/javascript" src = "javascript/validator.js"></script>
+<link href="css/bootstrap.min.css" rel="stylesheet"> <!--relationship is stylesheet-->
+<style>
+
+  .center {
+    margin-left: auto;
+    margin-right: auto;
+    width: 800px;
+  }
+  body {
+    text-align: center;
+    background-repeat: repeat-x;
+  }
+
+  h1 {
+    text-align: center;
+    margin: auto;
+    color: white;
+}
+
+
+</style>
+
+<head>
+
+  <title >Fruit Stall</title>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id = "navbarColor01">
+      <span><h1> FruitsBar </h1> </span>
+      <ul class="navbar-nav mr-auto">
+        <li >
+          <a class="nav-link" href="index.html">Home</a>  <!-- go back to front page-->
+        </li>
+        <li>
+          <a class = "nav-link">about us </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</head>
+
+<body>
+  <div class = "center">
+    <form action = "orderForm.php" id = "orderForm" method = "post" name = "orderForm">
+      </br>
+      Your name please:<input type = "text" name = "nameInput" placeholder = "Input your name here" id="nameInput" required></input>
+      <div id = "food table" class = "center">
+      </br><h4>Fruit Selection</h4>
+        <table border = 3 class = "center, table table-hover" >
+          <thead>
+             <tr>
+               <th scope="col">Fruits</th>
+               <th scope="col">Cost/Each</th>
+               <th scope="col">Amount</th>
+             </tr>
+           </thead>
+          <tr>
+            <td><img src="photos/apple.jpg" alt="apple icon" width = "20" height = "20" style="float:right;">Apple</td>
+            <td>$0.69</td>
+            <td> <!-- for is for form-->
+            <input type = "text" name = "AppleAmount" id = "AppleAmount" placeholder = "0" onchange="change(this.value)" /></br>
+            </td> <!-- id is for js/html , name is for php-->
+          </tr>
+          <tr>
+            <td><img src="photos/orange.jpg" alt="orange icon" width = "20" height = "20" style="float:right;">Orange</td>
+            <td>$0.59</td>
+            <td>
+            <input type = "text" name = "OrangeAmount" id = "OrangeAmount" placeholder = "0" onchange="change(this.value)"/></br>
+            </td>
+          </tr>
+          <!--3rd row-->
+          <tr>
+            <td><img src="photos/banana.jpg" alt="banana icon" width = "20" height = "20" style="float:right;">Banana</td>
+            <td>$0.39</td>
+            <td>
+            <input type = "text" name = "BananaAmount" id = "BananaAmount" placeholder = "0" onchange="change(this.value)"/></br>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Total Cost</td>
+            <td></td> <!--blank space-->
+            <td>
+            <input type = "text" name = "Total" id = "Total" onfocus="blur()" placeholder="0" > </br>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class = "center">
+        <h6> Select Payment method </h6>
+        <table border = 2 class = "center" style = "width: 50%">
+          <tr>
+            <td><img src="photos/visa.png" alt="Visa icon" width="40" style="float:left;margin:0px 10px">Visa</td> <!-- margin for picture top and down 0, left and right 10-->
+            <td><input type = "radio" name = "radio-btn" value="Visa" ></td>
+          </tr>
+          <tr>
+            <td><img src="photos/mastercard.png" alt="MasterCard icon" width="40" style="float:left;margin:0px 10px">MasterCard</td>
+            <td><input type = "radio" name = "radio-btn" value = "MasterCard" ></td>
+          </tr>
+          <tr>
+            <td><img src="photos/discover.png" alt="Discover icon" width="40" style="float:left;margin:0px 10px">Discover</td>
+            <td><input type = "radio" name = "radio-btn" value = "Discover" ></td>
+          </tr>
+        </table>
+      </div>
+
+      </br>
+      <button type = "submit" name = "submit" class="btn btn-warning" style="color: black" onclick="radioChecked()" >Submit</button>
+      </br>
+      </br>
+
+    </form>
+  </div>
+
+
+
+</body>
+</html>
