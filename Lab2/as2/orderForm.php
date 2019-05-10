@@ -1,47 +1,45 @@
 <?php
 	if(isset($_POST["nameInput"]) && isset($_POST["AppleAmount"]) && isset($_POST["BananaAmount"])
   && isset($_POST["OrangeAmount"]) && isset($_POST["Total"]) && isset($_POST["radio-btn"])) {
-    //variable initialisation, POST method
+    //variable initialisation, POST method is used to pass from html to php, php use name
   	$name = $_POST["nameInput"];
-
+		$numberRegex = "/\d+/"; //a shorthand character class, which matches all numbers
     $appleAmount = intval($_POST["AppleAmount"]);
-		$bananaAmount = intval($_POST["BananaAmount"]);
 		$orangeAmount = intval($_POST["OrangeAmount"]);
+		$bananaAmount = intval($_POST["BananaAmount"]);
 
 		$total = $_POST["Total"];
 
     $paymentMethod = $_POST["radio-btn"];
 
 		$fileName = "order.txt";
-		if(!is_file($fileName)){
-    	fopen($fileName, "w+"); //create an empty file
+
+		if (!file_exists($fileName)) {
+			// This code block expected to run only once
+			$contents = "Total number of apples: ".$appleAmount."\r\nTotal number of oranges: ".$orangeAmount."\r\nTotal number of bananas: ".$bananaAmount."\r\n";
+			file_put_contents($fileName, $contents); //create file and put the contents into the file
 		}
-
-		$file = fopen($fileName, "r") or die("Unable to open file!"); //last error check
-		$fileSize = filesize($fileName); //get file size
-
-		if($fileSize == 0) {  //if file is empty
-    	$file = fopen($fileName, "r+"); //erases the contents of the file or creates a new file if it doesn't exist. File pointer starts at the beginning of the file
-    	fwrite($file, "Total number of apples: $appleAmount\nTotal number of oranges: $orangeAmount\nTotal number of bananas: $bananaAmount");
+		else {
+			$file = fopen($fileName, "r");
+			$contents = "";
+			for ($i = 0; !feof($file); ++$i) {
+				$string = fgets($file);
+				preg_match($numberRegex, $string, $matches); //reg_match — Perform a regular expression match
+				switch($i) {
+					case 0: //.= Concatenation assignment
+						$contents .= preg_replace($numberRegex, $matches[0] + $appleAmount, $string); //preg_replace — Perform a regular expression search and replace
+						break;
+					case 1:
+						$contents .= preg_replace($numberRegex, $matches[0] + $orangeAmount, $string);
+						break;
+					case 2:
+						$contents .= preg_replace($numberRegex, $matches[0] + $bananaAmount, $string);
+						break;
+				}
+			}
+			fclose($file); //close the file, clear cache
+			file_put_contents($fileName, $contents); //the existing file is overwritten
 		}
-    else { //file not empty
-
-    	$fileText = fread( $fileName, $fileSize); //read the file, up to size of the file
-    	$orders = explode("\n" , $fileText); //create an array for every line
-    	$appleCurrent = intval(explode(": " , $orders[0])); //put appleAmount into array as an int, applesCurrent = array[0]
-    	$orangeCurrent = intval(explode(": " , $orders[1])); //put orangeAmount into array as an int, applesCurrent = array[0]
-    	$bananaCurrent = intval(explode(": " , $orders[2])); //put BananaAmount into array as an int, applesCurrent = array[0]
-
-    	$appleTotal = $appleAmount + $appleCurrent;
-    	$orangeTotal = $orangeAmount + $orangeCurrent;
-    	$bananaTotal = $bananaAmount + $bananaCurrent;
-
-
-    	$file = fopen($fileName, "w"); //Open a file for read/write. File pointer starts at the beginning of the file
-    	fwrite($file ,"Total number of apples: $appleTotal\nTotal number of oranges: $orangeTotal\n Total number of bananas: $bananaTotal") or die('fwrite failed');
-    }
-
-    fclose( $file ); //close file and clear buffer
     //print out reciept
     echo
     '<html>
@@ -49,7 +47,7 @@
       .center {
         margin-left: auto;
         margin-right: auto;
-        width: 800px;
+        width: 80%;
       }
     </style>
 		<head>
@@ -58,6 +56,7 @@
 		</head>
 		<body>
 		<div class="center">
+			<p> Name : '.$name.'</p>
 			<table class="center, table table-hover">
 	        	<tr>
 	        		<td>Name of Customer: </td>
@@ -76,7 +75,7 @@
 	        		<td>'.$bananaAmount.'</td>
 	        	</tr>
 	        	<tr>
-	        		<td>Total Price payed: </td>
+	        		<td>Total Price Payed: </td>
 	        		<td>'.$total.'</td>
 	        	</tr>
 	        	<tr>
@@ -87,9 +86,7 @@
 	    </div>
 	    </body>
 	   </html>';
-
 	}
-
 	else {
 		var_dump($_POST); //Dumps information about a variable
 		echo "<br/><h2>This is embarrasing, something went wrong, please try again</h2>";
